@@ -434,14 +434,14 @@ async function loadRepositoryIndex(index: number) {
   customBuildStore.updateRepository(index, { loading: true, error: undefined })
   
   try {
-    // Ensure the URL ends with '/Packages' for the feed URL
+    // Ensure the URL ends with the version-appropriate index file name
+    const fileName = packageManager.getPackageIndexFileName(firmware.currentVersion || '')
     let feedUrl = repo.url.trim()
-    if (!feedUrl.endsWith('/Packages')) {
-      // Add trailing slash if needed, then append 'Packages'
+    if (!feedUrl.endsWith(`/${fileName}`)) {
       if (!feedUrl.endsWith('/')) {
         feedUrl += '/'
       }
-      feedUrl += 'Packages'
+      feedUrl += fileName
     }
     
     const packages = await packageManager.fetchFeedPackages(feedUrl, repo.name || 'custom')
