@@ -405,7 +405,7 @@ function getModuleNameByKey(moduleKey: string): string {
                 )"
                 :label="translate('module-selector-download-label', '{name} URL', { name: download.name })"
                 :hint="translate('module-selector-download-hint', 'File will be saved to: {path}', { path: download.path })"
-                placeholder="https://example.com/file"
+                placeholder="https:&sol;&sol;example.com/file"
                 persistent-hint
                 :rules="getDownloadRules()"
               />
