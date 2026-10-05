@@ -253,7 +253,7 @@ export class PackageManagerService {
   /**
    * Package index file name for a version ('packages.adb' or 'Packages')
    */
-  getPackageIndexFileName(version: string): string {
+  getPackageIndexFileName(version: string): 'Packages' | 'packages.adb' {
     return this.isApkVersion(version) ? 'packages.adb' : 'Packages'
   }
 
