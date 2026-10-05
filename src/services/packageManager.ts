@@ -27,7 +27,7 @@ export class PackageManagerService {
   generateFeedUrls(version: string, architecture: string, target?: string, kernelInfo?: { version: string; release: string; vermagic: string }): string[] {
     const urls: string[] = []
     const baseUrl = this.isSnapshot(version) ? `${config.image_url}/snapshots` : `${config.image_url}/releases/${version}`
-    const fileName = this.isApkVersion(version) ? 'packages.adb' : 'Packages'
+    const fileName = this.getPackageIndexFileName(version)
 
     // Architecture-specific feeds
     const archUrl = `${baseUrl}/packages/${architecture}`
@@ -235,9 +235,26 @@ export class PackageManagerService {
     return version === 'SNAPSHOT' || version.endsWith('-SNAPSHOT')
   }
 
-  private isApkVersion(version: string): boolean {
+  /**
+   * Whether the version uses the apk v3 index: explicit override list in
+   * config.apk_versions, or release 25.12 and newer.
+   */
+  isApkVersion(version: string): boolean {
     const list = (config as any).apk_versions as string[] | undefined
-    return Array.isArray(list) ? list.includes(version) : false
+    if (Array.isArray(list) && list.includes(version)) return true
+    if (this.isSnapshot(version)) return false
+    const m = version.match(/^(\d+)\.(\d+)/)
+    if (!m) return false
+    const major = Number(m[1])
+    const minor = Number(m[2])
+    return major > 25 || (major === 25 && minor >= 12)
+  }
+
+  /**
+   * Package index file name for a version ('packages.adb' or 'Packages')
+   */
+  getPackageIndexFileName(version: string): string {
+    return this.isApkVersion(version) ? 'packages.adb' : 'Packages'
   }
 
   /**

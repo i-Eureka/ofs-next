@@ -30,7 +30,8 @@ export interface Config {
   // Enable/disable module management feature (optional)
   enable_module_management?: boolean
 
-  // Versions that use apk v3 package index (packages.adb)
+  // Override list of versions that use apk v3 package index (packages.adb).
+  // Releases 25.12 and newer are treated as apk-based automatically.
   apk_versions?: string[]
 }
 
@@ -65,6 +66,6 @@ export const config: Config = {
 
   // Enable/disable module management feature (optional)
   enable_module_management: false,
-  // Treat these versions as using apk v3 index
+  // Extra versions forced to apk v3 index (25.12+ is detected automatically)
   apk_versions: ["SNAPSHOT"]
 }
